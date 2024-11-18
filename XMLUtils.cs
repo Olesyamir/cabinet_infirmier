@@ -1,5 +1,8 @@
+using System.Text;
 using System.Xml;
 using System.Xml.Schema;
+using System.Xml.XPath;
+using System.Xml.Xsl;
 
 namespace CabinetInfirmier;
 
@@ -28,6 +31,23 @@ public class XMLUtils
             Console.Write("ERROR : ");
             Console.WriteLine(e.Message);
         }
+    }
+    
+    public static void XslTransform (string xmlFilePath, string xsltFilePath, string htmlFilePath) {
+        XPathDocument xpathDoc = new XPathDocument(xmlFilePath) ;
+        XslCompiledTransform xslt = new XslCompiledTransform();
+        
+        XsltSettings settings = new XsltSettings(true, true);
+        XmlResolver resolver = new XmlUrlResolver();
+        xslt.Load(xsltFilePath, settings, resolver);
+        
+        XsltArgumentList argList = new XsltArgumentList();
+        argList.AddParam("destinedName", "", "'Orouge'");
+        argList.AddParam("destinedId", "", "001");
+            
+        XmlTextWriter htmlWriter = new XmlTextWriter(htmlFilePath, Encoding.UTF8);
+        xslt.Transform(xpathDoc, argList, htmlWriter);
+        htmlWriter.Close();
     }
 
 }
