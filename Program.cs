@@ -3,4 +3,5 @@
 using CabinetInfirmier;
 
 Console.WriteLine("Hello, World!");
-await XMLUtils.ValidateXmlFileAsync ("http://www.univ-grenoble-alpes.fr/l3miage/medical ", "./data/xml/cabinet.xml", "./data/xsd/cabinet.xsd ");
+XMLUtils.ValidateXmlFileAsync ("http://www.univ-grenoble-alpes.fr/l3miage/medical", "./data/xsd/cabinet.xsd", "./data/xml/cabinet.xml");
+// XMLUtils.ValidateXmlFileAsync ("http://www.univ-grenoble-alpes.fr/l3miage/medical", "./data/xsd/patient.xsd", "./data/xml/patient.xml");

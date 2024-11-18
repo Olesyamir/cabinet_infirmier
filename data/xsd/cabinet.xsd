@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
            xmlns:med="http://www.univ-grenoble-alpes.fr/l3miage/medical"
-           xmlns:act="http://www.univ-grenoble-alpes.fr/l3miage/actes"
            targetNamespace="http://www.univ-grenoble-alpes.fr/l3miage/medical"
            elementFormDefault="qualified">
 
@@ -66,7 +65,7 @@
     <!--classe Patients-->
     <xs:complexType name="Patients">
         <xs:sequence>
-            <xs:element name="patient" type="Patient" maxOccurs="unbounded">
+            <xs:element name="patient" type="med:Patient" maxOccurs="unbounded">
                 <xs:keyref name="intervenantRefInfirmier" refer="med:uniqueIDInfirmier">
                     <xs:selector xpath="med:acte"/>
                     <xs:field xpath="@intervenant"/>
@@ -83,13 +82,8 @@
             <xs:element name="sexe" type="med:Typesexe"/>
             <xs:element name="naissance" type="xs:date"/>
             <xs:element name="numero" type="med:Numero"/>
-            <xs:element name="adresse" type="Adresse"/>
-            <xs:element name="visite" type="Visite">
-<!--                <xs:key name="uniqueIdActe">-->
-<!--                    <xs:selector xpath="act:acte"/>-->
-<!--                    <xs:field xpath="@idActe"/>-->
-<!--                </xs:key>-->
-            </xs:element>
+            <xs:element name="visite" type="med:Visite"/>
+            <xs:element name="adresse" type="med:Adresse"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -98,7 +92,7 @@
         <xs:sequence>
             <xs:element name="etage" type="xs:int" minOccurs="0"/>
             <xs:element name="numero" type="xs:int" minOccurs="0"/>
-            <xs:element name="rue" type="xs:string"/>
+            <xs:element name="rue" type="xs:string" minOccurs="0"/>
             <xs:element name="codePostal">
                 <xs:simpleType>
                     <xs:restriction base="xs:int">
@@ -128,17 +122,16 @@
     <!--classe Visite-->
     <xs:complexType name="Visite">
         <xs:sequence>
-            <xs:element name="acte" type="act:Acte"/>
+            <xs:element name="acte" type="med:Acte"/>
         </xs:sequence>
         <xs:attribute name="date" type="xs:date"/>
         <xs:attribute name="intervenant" type="med:ID"/>
     </xs:complexType>
     
     
-<!--    &lt;!&ndash;classe Acte&ndash;&gt;-->
-<!--    <xs:complexType name="Acte">-->
-<!--        <xs:attribute name="idActe" type="med:ID" use="required"/>&lt;!&ndash;code NGAP&ndash;&gt;-->
-<!--    </xs:complexType>-->
+    <xs:complexType name="Acte">
+        <xs:attribute name="idActe" type="med:ID" use="required"/><!--code NGAP-->
+    </xs:complexType>
 
 
 <!--    &lt;!&ndash;classe Soin&ndash;&gt;-->

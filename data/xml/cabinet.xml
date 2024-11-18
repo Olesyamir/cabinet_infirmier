@@ -2,7 +2,6 @@
 <cabinet
         xmlns="http://www.univ-grenoble-alpes.fr/l3miage/medical"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:act="http://www.univ-grenoble-alpes.fr/l3miage/actes"
         xsi:schemaLocation="http://www.univ-grenoble-alpes.fr/l3miage/medical ../xsd/cabinet.xsd">
 
     <infirmiers>
@@ -36,8 +35,10 @@
             <prenom>yvon</prenom>
             <sexe>M</sexe>
             <naissance>1998-08-22</naissance>
-            <numero>198082205545852</numero>
-
+            <numero>1980822055452</numero>
+            <visite date="2015-12-08" intervenant="001">
+                <acte idActe="109"/>
+            </visite>
             <adresse>
                 <etage>6</etage>
                 <numero>50</numero>
@@ -45,9 +46,6 @@
                 <codePostal>38031</codePostal>
                 <ville>Grenoble</ville>
             </adresse>
-            <visite date="2015-12-08" intervenant="001">
-                <acte idActe="109"/>
-            </visite>
 
         </patient>
 
@@ -62,7 +60,7 @@
                 <acte idActe="101"/>
             </visite>
             <adresse>
-                <numero>Rond-Point de la Croix de Vie</numero>
+                <rue>Rond-Point de la Croix de Vie</rue>
                 <codePostal>38700</codePostal>
                 <ville>La Tronche</ville>
             </adresse>
@@ -79,7 +77,7 @@
                 <acte idActe="102"/>
             </visite>
             <adresse>
-                <numero>Casimir Brenier</numero>
+                <rue>Casimir Brenier</rue>
                 <codePostal>38000</codePostal>
                 <ville>Grenoble</ville>
             </adresse>
@@ -92,7 +90,7 @@
             <sexe>M</sexe>
             <naissance>2011-08-02</naissance>
             <numero>1231231230123</numero>
-            <visite date="2015-12-08" intervenant="non défini">
+            <visite date="2015-12-08" intervenant="000">
                 <acte idActe="112"/>
             </visite>
             <adresse>
