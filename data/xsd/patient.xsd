@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:med="http://www.univ-grenoble-alpes.fr/l3miage/medical"
+           xmlns:act="http://www.univ-grenoble-alpes.fr/l3miage/actes"
+           targetNamespace="http://www.univ-grenoble-alpes.fr/l3miage/medical"
+           elementFormDefault="qualified">
+
+    <!--racine-->
+    <xs:element name="patient" type="med:Patient"/>
+
+
+    <!--classe Patient-->
+    <xs:complexType name="Patient" >
+        <xs:sequence>
+            <xs:element name="nom" type="xs:string"/>
+            <xs:element name="prenom" type="xs:string"/>
+            <xs:element name="sexe" type="med:Typesexe"/>
+            <xs:element name="naissance" type="xs:date"/>
+            <xs:element name="numeroSS" type="med:NumeroSS"/>
+            <xs:element name="adresse" type="Adresse"/>
+            <xs:element name="visite" type="Visite" maxOccurs="unbounded">
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!--classe Adresse-->
+    <xs:complexType name="Adresse">
+        <xs:sequence>
+            <xs:element name="etage" type="xs:int" minOccurs="0"/>
+            <xs:element name="numero" type="xs:int" minOccurs="0"/>
+            <xs:element name="rue" type="xs:string"/>
+            <xs:element name="codePostal">
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:totalDigits value="5"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="ville" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!--classe numero pattern-->
+    <xs:simpleType name="NumeroSS">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\d{13}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!--enum Typesexe-->
+    <xs:simpleType name="Typesexe">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="M"/>
+            <xs:enumeration value="F"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!--classe Visite-->
+    <xs:complexType name="Visite">
+        <xs:sequence>
+            <xs:element name="acte" type="act:Acte"/>
+        </xs:sequence>
+        <xs:attribute name="date" type="xs:date"/>
+        <xs:attribute name="intervenant" type="med:ID"/>
+    </xs:complexType>
+    
+    <!--enum ID-->
+    <xs:simpleType name="ID">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{3}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

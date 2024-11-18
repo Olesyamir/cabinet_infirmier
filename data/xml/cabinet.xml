@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cabinet
+        xmlns="http://www.univ-grenoble-alpes.fr/l3miage/medical"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:act="http://www.univ-grenoble-alpes.fr/l3miage/actes"
+        xsi:schemaLocation="http://www.univ-grenoble-alpes.fr/l3miage/medical ../xsd/cabinet.xsd">
+
+    <infirmiers>
+        <infirmier idI="001">
+            <nom>Frechie</nom>
+            <prenom>Sarah</prenom>
+            <photo>sarah.png</photo>
+        </infirmier>
+        <infirmier idI="002">
+            <nom>Sticke</nom>
+            <prenom>Sophie</prenom>
+            <photo>sophie.png</photo>
+        </infirmier>
+        <infirmier idI="003">
+            <nom>Ochon</nom>
+            <prenom>Paul</prenom>
+            <photo>paul.png</photo>
+        </infirmier>
+    </infirmiers>
+
+    <adresse>
+        <numero>60</numero>
+        <rue>rue de la Chimie</rue>
+        <codePostal>38041</codePostal>
+        <ville>Grenoble</ville>
+    </adresse>
+
+    <patients>
+        <patient>
+            <nom>alecole</nom>
+            <prenom>yvon</prenom>
+            <sexe>M</sexe>
+            <naissance>1998-08-22</naissance>
+            <numero>198082205545852</numero>
+
+            <adresse>
+                <etage>6</etage>
+                <numero>50</numero>
+                <rue>avenue Felix Viallet</rue>
+                <codePostal>38031</codePostal>
+                <ville>Grenoble</ville>
+            </adresse>
+            <visite date="2015-12-08" intervenant="001">
+                <acte idActe="109"/>
+            </visite>
+
+        </patient>
+
+        <!-- Premier patient ajouté -->
+        <patient>
+            <nom>Orouge</nom>
+            <prenom>Elvire</prenom>
+            <sexe>F</sexe>
+            <naissance>1982-03-08</naissance>
+            <numero>1234567890123</numero>
+            <visite date="2016-12-08" intervenant="001">
+                <acte idActe="101"/>
+            </visite>
+            <adresse>
+                <numero>Rond-Point de la Croix de Vie</numero>
+                <codePostal>38700</codePostal>
+                <ville>La Tronche</ville>
+            </adresse>
+        </patient>
+
+        <!-- Deuxième patient ajouté -->
+        <patient>
+            <nom>Pien</nom>
+            <prenom>Oscare</prenom>
+            <sexe>M</sexe>
+            <naissance>1975-03-25</naissance>
+            <numero>9876543210123</numero>
+            <visite date="2020-12-08" intervenant="001">
+                <acte idActe="102"/>
+            </visite>
+            <adresse>
+                <numero>Casimir Brenier</numero>
+                <codePostal>38000</codePostal>
+                <ville>Grenoble</ville>
+            </adresse>
+        </patient>
+
+        <!-- Troisième patient ajouté -->
+        <patient>
+            <nom>Kapotla</nom>
+            <prenom>Xavier</prenom>
+            <sexe>M</sexe>
+            <naissance>2011-08-02</naissance>
+            <numero>1231231230123</numero>
+            <visite date="2015-12-08" intervenant="non défini">
+                <acte idActe="112"/>
+            </visite>
+            <adresse>
+                <numero>25</numero>
+                <codePostal>38042</codePostal>
+                <ville>Grenoble</ville>
+            </adresse>
+        </patient>
+    </patients>
+
+    <nom>Cabinet de Soins à Grenoble</nom>
+
+
+</cabinet>

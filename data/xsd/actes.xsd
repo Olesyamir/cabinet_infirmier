@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.univ-grenoble-alpes.fr/l3miage/actes"
+           xmlns:act="http://www.univ-grenoble-alpes.fr/l3miage/actes"
+           elementFormDefault="qualified">
+
+    <!-- Définition de l'élément racine ngap -->
+    <xs:element name ='ngap' type="act:Ngap"/>
+    
+    <!-- classe Ngap -->
+    <xs:complexType name="Ngap">
+        <xs:sequence>
+            <xs:element name="types" type="act:Types">
+                <xs:key name="typeSoin">
+                    <xs:selector xpath="act:type"/>
+                    <xs:field xpath="@idType"/>
+                </xs:key>
+            </xs:element>
+            <xs:element name="actes" type="act:Actes"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- classe Types -->
+    <xs:complexType name="Types">
+        <xs:sequence>
+            <xs:element name="type" type="act:Type" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- classe Type -->
+    <xs:complexType name="Type">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <!-- Attribut obligatoire id -->
+                <xs:attribute name="idType" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    
+    <!-- classe Actes -->
+    <xs:complexType name="Actes">
+        <xs:sequence>
+            <xs:element name="acte" type="act:Acte" maxOccurs="unbounded"> <!-- TODO: id unique -->
+                <xs:keyref name="typeIdRefTypeActe" refer="act:typeSoin">
+                    <xs:selector xpath="act:acte"/>
+                    <xs:field xpath="@type"/>
+                </xs:keyref>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- classe Acte -->
+    <xs:complexType name="Acte">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <!-- Attribut obligatoire id -->
+                <xs:attribute name="idActe" type="xs:string" use="required"/>
+                <xs:attribute name="type" type="xs:string"/> <!-- ajouter la restr -->
+                <xs:attribute name="cle" type="act:Cle"/> 
+                <xs:attribute name="coef" type="xs:double"/> 
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="Cle">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="AMI"/>
+            <xs:enumeration value="AIS"/>
+            <xs:enumeration value="DI"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+</xs:schema>
