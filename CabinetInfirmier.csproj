@@ -42,6 +42,9 @@
       <None Update="data\html\etape1.html">
         <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       </None>
+      <None Update="data\js\facture.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
