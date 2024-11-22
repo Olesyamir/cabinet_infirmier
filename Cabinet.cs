@@ -1,0 +1,70 @@
+using System.Xml;
+
+namespace CabinetInfirmier;
+
+public class Cabinet
+{
+    public static void AnalyseGlobale(string filepath) {
+    var settings = new XmlReaderSettings();
+
+    using var reader = XmlReader.Create(filepath, settings);
+    reader.MoveToContent();
+
+    while (reader.Read()) {
+        switch (reader.NodeType) {
+            case XmlNodeType.XmlDeclaration:
+                // Instructions à exécuter quand une déclaration XML est détectée
+                Console.Write("Found XML declaration (<?xml version='1.0'?>)");
+                break;
+
+            case XmlNodeType.Document:
+                // Instructions à exécuter au début du document
+                Console.Write("Entering the document");
+                break;
+
+            case XmlNodeType.Comment:
+                // Instructions à exécuter quand un commentaire est trouvé
+                Console.Write("Comment = <!--{0}-->", reader.Value);
+                break;
+
+            case XmlNodeType.Element:
+                Console.WriteLine("Starts the element {0}", reader.Name);
+
+                // Lire et afficher les attributs de l'élément
+                if (reader.HasAttributes)
+                {
+                    Console.WriteLine("Attributes of {0}:", reader.Name);
+                    while (reader.MoveToNextAttribute())
+                    {
+                        Console.WriteLine(" - {0} = {1}", reader.Name, reader.Value);
+                    }
+
+                    // Revenir à l'élément après avoir lu les attributs
+                    reader.MoveToElement();
+                }
+                break;
+
+            case XmlNodeType.CDATA:
+                // Instructions à exécuter quand on trouve un bloc CDATA
+                Console.Write("Found CData part: <![CDATA[{0}]]>", reader.Value);
+                break;
+
+            case XmlNodeType.Text:
+                // Instructions à exécuter quand on trouve du texte
+                Console.WriteLine("Text node value = {0}", reader.Value);
+                break;
+
+            case XmlNodeType.EndElement:
+                // Instructions à exécuter quand on sort d’un élément
+                Console.WriteLine("Ends the element {0}", reader.Name);
+                break;
+
+            default:
+                // Instructions à exécuter dans les autres cas
+                Console.WriteLine("Other node of type {0} with value {1}", reader.NodeType, reader.Value);
+                break;
+        }
+    }
+    }
+
+}
