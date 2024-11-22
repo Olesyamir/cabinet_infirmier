@@ -42,12 +42,15 @@ public class XMLUtils
         xslt.Load(xsltFilePath, settings, resolver);
         
         XsltArgumentList argList = new XsltArgumentList();
-        argList.AddParam("destinedName", "", "'Orouge'");
-        argList.AddParam("destinedId", "", "001");
+        argList.AddParam("destinedName", "", "Orouge");
+        // argList.AddParam("destinedId", "", "001");
             
-        XmlTextWriter htmlWriter = new XmlTextWriter(htmlFilePath, Encoding.UTF8);
-        xslt.Transform(xpathDoc, argList, htmlWriter);
-        htmlWriter.Close();
+        // XmlTextWriter htmlWriter = new XmlTextWriter(htmlFilePath, Encoding.UTF8);
+        // xslt.Transform(xpathDoc, argList, htmlWriter);
+        using (StreamWriter htmlWriter = new StreamWriter(htmlFilePath, false, Encoding.UTF8)) {
+            xslt.Transform(xpathDoc, argList, htmlWriter);
+        }
+        // htmlWriter.Close();
     }
 
 }

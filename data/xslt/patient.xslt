@@ -9,6 +9,7 @@
     
     <!-- Paramètre pour le nom du patient -->
     <xsl:param name="destinedName"/>
+    
 
     <!-- Clé pour rechercher un acte en fonction de l'idActe dans ngap.xml -->
     <xsl:key name="acteById" match="act:acte" use="@idActe" />
