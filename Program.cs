@@ -9,5 +9,8 @@ Console.WriteLine("Hello, World!");
 // XMLUtils.ValidateXmlFileAsync ("http://www.univ-grenoble-alpes.fr/l3miage/actes", "./data/xsd/actes.xsd", "./data/xml/actes.xml");
 AppContext.SetSwitch("Switch.System.Xml.AllowDefaultResolver", true);
 
+// execution de XSLT
 // XMLUtils.XslTransform("./data/xml/cabinet.xml", "./data/xslt/cabinet.xslt", "./data/html/cabinet_TEST.html");
-XMLUtils.XslTransform("./data/xml/cabinet.xml", "./data/xslt/patient.xslt", "./data/xml/patient_TEST.xml");
+// XMLUtils.XslTransform("./data/xml/cabinet.xml", "./data/xslt/patient.xslt", "./data/xml/patient_TEST.xml");
+
+Cabinet.AnalyseGlobale("./data/xml/cabinet.xml");
