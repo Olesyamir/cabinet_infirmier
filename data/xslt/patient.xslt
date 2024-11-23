@@ -101,21 +101,21 @@
     
     
 
-    <!-- Шаблон для обработки каждого <visite> -->
+    <!-- Template pour chaque <visite> -->
     <xsl:template match="ns:visite">
         <visite date="{@date}">
             <intervenant>
-                <!-- Находим информацию об интервенанте -->
+                <!-- Trouver info de l'intervenant -->
                 <xsl:variable name="infirmier"
                               select="//ns:infirmier[@idI = @intervenant]" />
                 <nom><xsl:value-of select="$infirmier/ns:nom"/></nom>
                 <prenom><xsl:value-of select="$infirmier/ns:prenom"/></prenom>
             </intervenant>
             <acte>
-                <!-- Загружаем внешний документ -->
+                <!-- Chargement de doc ACTES.XML -->
                 <xsl:variable name="externalDoc" select="document('../xml/actes.xml')"/>
 
-                <!-- Поиск элемента в загруженном документе -->
+                <!-- Recherche de l'element dans doc  -->
                 <xsl:variable name="acte"
                               select="$externalDoc//act:acte[@idActe = current()/ns:acte/@idActe]"/>
 
