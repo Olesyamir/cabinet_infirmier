@@ -107,7 +107,7 @@
     <!--classe numero pattern-->
     <xs:simpleType name="Numero">
         <xs:restriction base="xs:string">
-            <xs:pattern value="\d{13}"/>
+            <xs:pattern value="\d{15}"/>
         </xs:restriction>
     </xs:simpleType>
 

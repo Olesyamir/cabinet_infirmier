@@ -31,14 +31,14 @@
 
     <patients>
         <patient>
-            <nom>alecole</nom>
-            <prenom>yvon</prenom>
-            <sexe>M</sexe>
-            <naissance>1998-08-22</naissance>
-            <numero>1980822055452</numero>
-            <visite date="2015-12-08" intervenant="001">
-                <acte idActe="109"/>
-            </visite>
+        <nom>alecole</nom>
+        <prenom>yvon</prenom>
+        <sexe>M</sexe>
+        <naissance>1998-08-22</naissance>
+        <numero>198082205545852</numero>
+        <visite date="2015-12-08" intervenant="001">
+            <acte idActe="109"/>
+        </visite>
             <adresse>
                 <etage>6</etage>
                 <numero>50</numero>
@@ -55,7 +55,7 @@
             <prenom>Elvire</prenom>
             <sexe>F</sexe>
             <naissance>1982-03-08</naissance>
-            <numero>1234567890123</numero>
+            <numero>282030802305200</numero>
             <visite date="2016-12-08" intervenant="001">
                 <acte idActe="101"/>
             </visite>
@@ -72,7 +72,7 @@
             <prenom>Oscare</prenom>
             <sexe>M</sexe>
             <naissance>1975-03-25</naissance>
-            <numero>9876543210123</numero>
+            <numero>175032506569200</numero>
             <visite date="2020-12-08" intervenant="001">
                 <acte idActe="102"/>
             </visite>
@@ -89,7 +89,7 @@
             <prenom>Xavier</prenom>
             <sexe>M</sexe>
             <naissance>2011-08-02</naissance>
-            <numero>1231231230123</numero>
+            <numero>111080206303500</numero>
             <visite date="2015-12-08" intervenant="000">
                 <acte idActe="112"/>
             </visite>
