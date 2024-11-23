@@ -2,14 +2,18 @@
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:ns="http://www.univ-grenoble-alpes.fr/l3miage/medical"
-                xmlns:act='http://www.univ-grenoble-alpes.fr/l3miage/actes'
+                xmlns:act="http://www.univ-grenoble-alpes.fr/l3miage/actes"
                 exclude-result-prefixes="ns act">
     
     <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
     
     <!-- Paramètre pour le nom du patient -->
-    <xsl:param name="destinedName"/>
-    
+    <!--    appliquer ce destinedName when "run patient.xslt"-->
+    <xsl:param name="destinedName" select="'Orouge'"/>
+<!--    <xsl:param name="destinedName"/>-->
+
+    <xsl:key name="acteById" match="act:acte" use="@idActe"/>
+
 
     <!-- Clé pour rechercher un acte en fonction de l'idActe dans ngap.xml -->
     <xsl:key name="acteById" match="act:acte" use="@idActe" />
@@ -63,35 +67,70 @@
     <!-- Template pour extraire les informations des visites -->
     <xsl:template name="visite-info">
         <xsl:param name="visits"/>
-        <xsl:for-each select="$visits">
-            <visite date="{@date}">
-                <intervenant>
-                    <xsl:variable name="infirmier"
-                                  select="//ns:infirmier[@idI = current()/@intervenant]" />
-                    <nom><xsl:value-of select="$infirmier/ns:nom"/></nom>
-                    <prenom><xsl:value-of select="$infirmier/ns:prenom"/></prenom>
-                </intervenant>
+<!--        <xsl:for-each select="$visits">-->
+<!--            <visite date="{@date}">-->
+<!--                <intervenant>-->
+<!--                    <xsl:variable name="infirmier"-->
+<!--                                  select="//ns:infirmier[@idI = current()/@intervenant]" />-->
+<!--                    <nom><xsl:value-of select="$infirmier/ns:nom"/></nom>-->
+<!--                    <prenom><xsl:value-of select="$infirmier/ns:prenom"/></prenom>-->
+<!--                </intervenant>-->
 <!--                <acte>-->
-<!--                    <xsl:variable name="acte"-->
-<!--                                  select="//act:ngap/act:actes/act:acte[@idActe = current()/@idActe]" />-->
-<!--                    <xsl:value-of select="$acte/text()"/>-->
-<!--                </acte>-->
-                <acte>
-                    <!-- Utilise la clé pour récupérer directement le texte de l'acte correspondant à l'idActe -->
-                    <xsl:variable name="acteDescription"
-                                  select="key('acteById', current()/ns:acte/@idActe)/text()" />
+<!--                    <xsl:variable name="externalDoc" select="document('../xml/actes.xml')"/>-->
 
-                    <xsl:choose>
-                        <xsl:when test="$acteDescription">
-                            <!-- Affiche la description de l'acte -->
-                            <xsl:value-of select="$acteDescription" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:text>Aucun acte trouvé pour cet idActe.</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
-            </acte>
-            </visite>
-        </xsl:for-each>
+<!--                    &lt;!&ndash; Поиск элемента в загруженном документе &ndash;&gt;-->
+<!--                    <xsl:variable name="acte"-->
+<!--                                  select="$externalDoc//act:acte[@idActe = current()/ns:acte/@idActe]"/>-->
+
+<!--                    <xsl:choose>-->
+<!--                        <xsl:when test="$acte">-->
+<!--                            <description>-->
+<!--                                <xsl:value-of select="$acte"/>-->
+<!--                            </description>-->
+<!--                        </xsl:when>-->
+<!--                        <xsl:otherwise>-->
+<!--                            <description>Aucun acte trouvé pour cet idActe.</description>-->
+<!--                        </xsl:otherwise>-->
+<!--                    </xsl:choose>-->
+<!--                </acte>-->
+<!--            </visite>-->
+<!--        </xsl:for-each>-->
+        <xsl:apply-templates select="$visits"/>
+
     </xsl:template>
+    
+    
+
+    <!-- Шаблон для обработки каждого <visite> -->
+    <xsl:template match="ns:visite">
+        <visite date="{@date}">
+            <intervenant>
+                <!-- Находим информацию об интервенанте -->
+                <xsl:variable name="infirmier"
+                              select="//ns:infirmier[@idI = @intervenant]" />
+                <nom><xsl:value-of select="$infirmier/ns:nom"/></nom>
+                <prenom><xsl:value-of select="$infirmier/ns:prenom"/></prenom>
+            </intervenant>
+            <acte>
+                <!-- Загружаем внешний документ -->
+                <xsl:variable name="externalDoc" select="document('../xml/actes.xml')"/>
+
+                <!-- Поиск элемента в загруженном документе -->
+                <xsl:variable name="acte"
+                              select="$externalDoc//act:acte[@idActe = current()/ns:acte/@idActe]"/>
+
+                <xsl:choose>
+                    <xsl:when test="$acte">
+                        <description>
+                            <xsl:value-of select="$acte"/>
+                        </description>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <description>Aucun acte trouvé pour cet idActe.</description>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </acte>
+        </visite>
+    </xsl:template>
+    
 </xsl:stylesheet>

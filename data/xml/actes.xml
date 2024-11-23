@@ -1,9 +1,9 @@
 <?xml version ="1.0" encoding ="UTF-8"?>
 <ngap
-        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-        xmlns='http://www.univ-grenoble-alpes.fr/l3miage/actes'
-        xsi:schemaLocation ='http://www.univ-grenoble-alpes.fr/l3miage/actes 
-                ../xsd/actes.xsd'>
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.univ-grenoble-alpes.fr/l3miage/actes"
+        xsi:schemaLocation ="http://www.univ-grenoble-alpes.fr/l3miage/actes 
+                ../xsd/actes.xsd">
     
     <types>
         <type idType ="pi">prélèvements et injections </type>

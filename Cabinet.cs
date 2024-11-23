@@ -120,9 +120,5 @@ public class Cabinet
 
         return liste_actes.Count;
     }// fin de fonction GetNbActes
-
-    public static void f (string filepath)
-    {
-        
-    }
+    
 } // fin de la classe 

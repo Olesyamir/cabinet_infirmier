@@ -24,18 +24,6 @@ bool HasAdresse(string xmlFilePath, string myXpathExpression, string nsURI)
 
 bool isNumeroValide(string nomPatient)
 {
-    // DOM2Xpath patientDOM = new DOM2Xpath("./data/xml/cabinet.xml");
-    // string myXpathExpression = "//med:cabinet/med:patients/med:patient[med:nom='" + nomPatient + "']";
-    // XmlNodeList nlNumeroDOM = patientDOM.GetXPath ("med", "http://www.univ-grenoble-alpes.fr/l3miage/medical", myXpathExpression);
-    //
-    // string dateNaissance = nlNumeroDOM.
-    // string numero = nlNumeroDOM[0].InnerText;
-    // // logique
-    // if (numero[0] == '0')
-    // return false;
-    
-    // Initialiser l'accès au fichier XML via DOM2Xpath
-    // Charger le document XML
     XmlDocument xmlDoc = new XmlDocument();
     xmlDoc.Load("./data/xml/cabinet.xml");
 
@@ -109,7 +97,7 @@ AppContext.SetSwitch("Switch.System.Xml.AllowDefaultResolver", true);
 
 // execution de XSLT
 // XMLUtils.XslTransform("./data/xml/cabinet.xml", "./data/xslt/cabinet.xslt", "./data/html/cabinet_TEST.html");
-// XMLUtils.XslTransform("./data/xml/cabinet.xml", "./data/xslt/patient.xslt", "./data/xml/patient_TEST.xml");
+XMLUtils.XslTransform("./data/xml/cabinet.xml", "./data/xslt/patient.xslt", "./data/xml/patient_TEST.xml");
 
 // parser
 // Cabinet.AnalyseGlobale("./data/xml/cabinet.xml");
@@ -129,5 +117,5 @@ AppContext.SetSwitch("Switch.System.Xml.AllowDefaultResolver", true);
 //      une adresse complète pour alecole
 // Console.WriteLine("Adresse est complet : {0}",HasAdresse(xmlPathCabinet, "//med:cabinet/med:patients/med:patient[med:nom='alecole']/med:adresse", URICabinet));
 // 
-
-Console.WriteLine(isNumeroValide("Orouge"));
+//      numero securite sociale est valide pour Orouge
+// Console.WriteLine(isNumeroValide("Orouge"));
