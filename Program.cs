@@ -13,4 +13,6 @@ AppContext.SetSwitch("Switch.System.Xml.AllowDefaultResolver", true);
 // XMLUtils.XslTransform("./data/xml/cabinet.xml", "./data/xslt/cabinet.xslt", "./data/html/cabinet_TEST.html");
 // XMLUtils.XslTransform("./data/xml/cabinet.xml", "./data/xslt/patient.xslt", "./data/xml/patient_TEST.xml");
 
-Cabinet.AnalyseGlobale("./data/xml/cabinet.xml");
+// parser
+// Cabinet.AnalyseGlobale("./data/xml/cabinet.xml");
+// Cabinet.GetAllElements("./data/xml/cabinet.xml", "nom", "patient");
