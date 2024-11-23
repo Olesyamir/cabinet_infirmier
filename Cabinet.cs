@@ -97,6 +97,32 @@ public class Cabinet
                     break;
             }
         }
-    }
+    } //fin fonction GetAllElemets
 
-}
+    public static int GetNbActes(string filepath)
+    {
+        var settings = new XmlReaderSettings();
+
+        using var reader = XmlReader.Create(filepath, settings);
+        reader.MoveToContent();
+
+        List<string> liste_actes = new List<string>();
+
+        while (reader.Read())
+        {
+            if (reader.Name == "acte")
+            {
+                reader.MoveToFirstAttribute();
+                if (!liste_actes.Contains(reader.Value))
+                    liste_actes.Add(reader.Value);
+            }
+        }
+
+        return liste_actes.Count;
+    }// fin de fonction GetNbActes
+
+    public static void f (string filepath)
+    {
+        
+    }
+} // fin de la classe 
