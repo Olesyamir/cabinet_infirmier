@@ -1,1 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?><patient>Aucun patient trouvé.</patient>
+<?xml version="1.0" encoding="UTF-8"?><patient>
+    <nom>Orouge</nom>
+    <prenom>Elvire</prenom>
+    <sexe>F</sexe>
+    <naissance>1982-03-08</naissance>
+    <numeroSS>282030802305200</numeroSS>
+    <adresse>
+        <numero/>
+        <codePostal>38700</codePostal>
+        <ville>La Tronche</ville>
+    </adresse>
+    <visite date="2016-12-08">
+        <intervenant>
+            <nom/>
+            <prenom/>
+        </intervenant>
+        <acte>
+            <description>
+            Prélèvement par ponction veineuse directe
+            </description>
+        </acte>
+    </visite>
+</patient>
