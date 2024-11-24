@@ -121,4 +121,6 @@ public class Cabinet
         return liste_actes.Count;
     }// fin de fonction GetNbActes
     
+    
+    
 } // fin de la classe 
