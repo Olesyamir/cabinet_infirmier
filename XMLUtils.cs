@@ -15,21 +15,23 @@ public class XMLUtils
         settings.ValidationType = ValidationType.Schema;
         Console.WriteLine("Nombre de schémas utilisés dans la validation : " + settings.Schemas.Count);
         settings.ValidationEventHandler += ValidationCallBack;
-        using var reader = XmlReader.Create(xmlFilePath, settings);
-        while (await reader.ReadAsync()) { }
+        var readItems = XmlReader.Create(xmlFilePath, settings);
+        while (readItems.Read()) { }
     }
 
     private static void ValidationCallBack(object? sender, ValidationEventArgs e)
     {
         if (e.Severity == XmlSeverityType.Warning)
         {
-            Console.Write("WARNING : ");
-            Console.WriteLine(e.Message);
+            Console.WriteLine($"WARNING: {e.Message}");
         }
         else if (e.Severity == XmlSeverityType.Error)
         {
-            Console.Write("ERROR : ");
-            Console.WriteLine(e.Message);
+            Console.WriteLine($"ERROR: {e.Message}");
+            if (sender is XmlReader reader)
+            {
+                Console.WriteLine($"Error at line {((IXmlLineInfo)reader).LineNumber}, position {((IXmlLineInfo)reader).LinePosition}");
+            }
         }
     }
     
