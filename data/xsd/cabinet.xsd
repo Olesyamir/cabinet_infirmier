@@ -4,26 +4,28 @@
            targetNamespace="http://www.univ-grenoble-alpes.fr/l3miage/medical"
            elementFormDefault="qualified">
 
+    
+    
     <!--racine-->
     <xs:element name="cabinet" type="med:Cabinet">
-<!--        <xs:keyref name="refExist" refer="hd:uniqueMag">
-            <xs:selector xpath="hd:expo/hd:reference"/>
-            <xs:field xpath="@refProduit"/>
-            <xs:field xpath="@refElementProduit"/>
-        </xs:keyref> 
-        
-        il faut ajouter ca -->
-        
+        <xs:key name="uniqueIDInfirmier">
+            <xs:selector xpath="med:infirmiers/med:infirmier"/>
+            <xs:field xpath="@idI"/>
+        </xs:key>
+
+        <xs:keyref name="intervenantRefInfirmier" refer="med:uniqueIDInfirmier">
+            <xs:selector xpath="med:patients/med:patient/med:visite"/>
+            <xs:field xpath="@intervenant"/>
+        </xs:keyref>
+
+
+
     </xs:element>
 
     <!--classe cabinet-->
     <xs:complexType name="Cabinet">
         <xs:sequence>
             <xs:element name="infirmiers" type="med:Infirmiers" >
-                <xs:key name="uniqueIDInfirmier">
-                    <xs:selector xpath="med:infirmier"/>
-                    <xs:field xpath="@idI"/>
-                </xs:key>
             </xs:element>
             <xs:element name="adresse" type="med:Adresse" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="patients" type="med:Patients" minOccurs="0" maxOccurs="unbounded"/>
@@ -58,18 +60,13 @@
             <xs:pattern value=".*\.(jpg|png)"/>
         </xs:restriction>
     </xs:simpleType>
-
-
     
 
     <!--classe Patients-->
     <xs:complexType name="Patients">
         <xs:sequence>
             <xs:element name="patient" type="med:Patient" maxOccurs="unbounded">
-                <xs:keyref name="intervenantRefInfirmier" refer="med:uniqueIDInfirmier">
-                    <xs:selector xpath="med:acte"/>
-                    <xs:field xpath="@intervenant"/>
-                </xs:keyref>
+                
             </xs:element>
         </xs:sequence>
     </xs:complexType>
@@ -132,24 +129,13 @@
     <xs:complexType name="Acte">
         <xs:attribute name="idActe" type="med:ID" use="required"/><!--code NGAP-->
     </xs:complexType>
-
-
-<!--    &lt;!&ndash;classe Soin&ndash;&gt;-->
-<!--    <xs:complexType name="Soin">-->
-<!--        <xs:sequence>-->
-<!--            <xs:element name="description" type="xs:string"/>-->
-<!--        </xs:sequence>-->
-
-<!--    </xs:complexType>-->
+    
 
     <!--enum ID-->
     <xs:simpleType name="ID">
         <xs:restriction base="xs:string">
-            <xs:pattern value="[0-9]{3}"/>
+            <xs:pattern value="[0-9]{3}|-"/>
         </xs:restriction>
     </xs:simpleType>
-
-
-
 
 </xs:schema>
