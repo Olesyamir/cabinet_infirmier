@@ -22,6 +22,32 @@ public class CabinetXMLReader {
         return nlAdresseDOM[0].ChildNodes.Count > 3;
     }// fin de foction HasAdresse
 
+    public static bool isNumeroValide0(string sexe, string numero, string naissance)
+    {
+        // Extraire les informations de naissance
+        string[] dateNaissance = naissance.Split('-');
+        string anneeNaissance = dateNaissance[0];
+        string moisNaissance = dateNaissance[1].PadLeft(2, '0');  // Ajouter un zéro devant si nécessaire
+        string jourNaissance = dateNaissance[2].PadLeft(2, '0');  // Ajouter un zéro devant si nécessaire
+
+        // Extraire les deux derniers chiffres de l'année de naissance
+        string derniersChiffresAnnee = anneeNaissance.Substring(2, 2);
+
+        // Vérifier les conditions
+        bool conditionSexe = (sexe == "M" && numero[0] == '1') || (sexe == "F" && numero[0] == '2');
+        bool conditionDate = numero.Substring(1, 2) == derniersChiffresAnnee;
+        bool conditionMois = numero.Substring(3, 2) == moisNaissance;
+        bool conditionJour = numero.Substring(5, 2) == jourNaissance;
+        
+        if (conditionSexe && conditionDate && conditionMois && conditionJour)
+        {
+            return true;
+        }
+
+        return false;
+        
+    } // fin fonction isNumeroValide0
+    
     public static bool isNumeroValide(string nomPatient)
     {
         XmlDocument xmlDoc = new XmlDocument();
@@ -58,29 +84,8 @@ public class CabinetXMLReader {
         string sexe = sexeNode.InnerText;
         string numero = numeroNode.InnerText;
         string naissance = naissanceNode.InnerText;
-
-        // Extraire les informations de naissance
-        string[] dateNaissance = naissance.Split('-');
-        string anneeNaissance = dateNaissance[0];
-        string moisNaissance = dateNaissance[1].PadLeft(2, '0');  // Ajouter un zéro devant si nécessaire
-        string jourNaissance = dateNaissance[2].PadLeft(2, '0');  // Ajouter un zéro devant si nécessaire
-
-        // Extraire les deux derniers chiffres de l'année de naissance
-        string derniersChiffresAnnee = anneeNaissance.Substring(2, 2);
-
-        // Vérifier les conditions
-        bool conditionSexe = (sexe == "M" && numero[0] == '1') || (sexe == "F" && numero[0] == '2');
-        bool conditionDate = numero.Substring(1, 2) == derniersChiffresAnnee;
-        bool conditionMois = numero.Substring(3, 2) == moisNaissance;
-        bool conditionJour = numero.Substring(5, 2) == jourNaissance;
-
-        // Si toutes les conditions sont remplies, retourner true
-        if (conditionSexe && conditionDate && conditionMois && conditionJour)
-        {
-            return true;
-        }
-
-        return false;
+        
+        return (isNumeroValide0(sexe, numero, naissance));
 
     }// fin de foction isNumeroValide
 

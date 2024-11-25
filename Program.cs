@@ -40,3 +40,4 @@ string URICabinet = "http://www.univ-grenoble-alpes.fr/l3miage/medical";
 // ajouter un infirmier dont l’id sera 005. Il s’appelle Némard Jean.
 CabinetDOM cabinetDom = new CabinetDOM(xmlPathCabinet);
 cabinetDom.AddInfirmier("Nemard", "Jean");
+cabinetDom.AddPatient("Niskotch", "Nicole", "F", "1999-03-01", "299030105545853", "","6", "Universite", "38400", "Grenoble");

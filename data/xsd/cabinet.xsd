@@ -76,7 +76,7 @@
             <xs:element name="sexe" type="med:Typesexe"/>
             <xs:element name="naissance" type="xs:date"/>
             <xs:element name="numero" type="med:Numero"/>
-            <xs:element name="visite" type="med:Visite"/>
+            <xs:element name="visite" type="med:Visite" minOccurs="0"/>
             <xs:element name="adresse" type="med:Adresse"/>
         </xs:sequence>
     </xs:complexType>
