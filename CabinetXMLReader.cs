@@ -99,7 +99,6 @@ public class CabinetXMLReader {
                             maxID = reader.Value;
                         }
                     }
-
                     break;
             }
         }
