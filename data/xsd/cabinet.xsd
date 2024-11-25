@@ -17,9 +17,6 @@
             <xs:selector xpath="med:patients/med:patient/med:visite"/>
             <xs:field xpath="@intervenant"/>
         </xs:keyref>
-
-
-
     </xs:element>
 
     <!--classe cabinet-->
