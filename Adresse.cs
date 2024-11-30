@@ -34,7 +34,6 @@ public class Adresse
             else if (_codepostal < 0) _codepostal = int.Abs(value);
         }
         get { return _codepostal; }
-        
     }
     [XmlElement("ville")] public String _Ville { set; get; }
     
