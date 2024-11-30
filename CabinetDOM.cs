@@ -19,6 +19,14 @@ public class CabinetDOM
         nsmgr.AddNamespace(root.Prefix, root.NamespaceURI);
     }
     
+    public XmlNodeList GetXPath(string nsPrefix, string nsURI, string expression)
+    {
+        XmlNode root = doc.DocumentElement;
+        XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
+        nsmgr.AddNamespace(nsPrefix, nsURI);
+        return root.SelectNodes(expression, nsmgr);
+    }
+    
     public String GetNSPrefix() {
         return root.Prefix;
     }
