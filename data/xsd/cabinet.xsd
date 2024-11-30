@@ -21,6 +21,12 @@
 
     <!-- Définition de l'élément racine adresse -->
     <xs:element name="adresse" type="med:Adresse"/>
+    
+    <!-- Définition de l'élément racine infirmier -->
+    <xs:element name="infirmier" type="med:Infirmier"/>
+    
+    <!-- Définition de l'élément racine infirmiers -->
+    <xs:element name="infirmiers" type="med:Infirmiers"/>
 
     <!--classe cabinet-->
     <xs:complexType name="Cabinet">

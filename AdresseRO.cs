@@ -4,11 +4,11 @@ namespace CabinetInfirmier;
 
 [Serializable]
 [XmlRoot("adresse", Namespace = "http://www.univ-grenoble-alpes.fr/l3miage/medical")]
-public class Adresse
+public class AdresseRO
 {
     private int _etage;
     [XmlElement("etage")] public int _Etage {
-        set
+        init
         {
             _etage = value;
             if (_etage < 0) _etage = int.Abs(value);
@@ -18,7 +18,7 @@ public class Adresse
 
     private int _numero;
     [XmlElement("numero")] public int _Numero { 
-        set
+        init
         {
             _numero = value;
             if (_numero < 0) _numero = int.Abs(value);
@@ -27,7 +27,7 @@ public class Adresse
     [XmlElement("rue")] public String _Rue { set; get; }
     private int _codepostal;
     [XmlElement("codePostal")] public int _CodePostal { 
-        set
+        init
         {
             _codepostal = value;
             if (_codepostal.ToString().Length != 5) _codepostal = 38000;
@@ -36,7 +36,7 @@ public class Adresse
         get { return _codepostal; }
         
     }
-    [XmlElement("ville")] public String _Ville { set; get; }
+    [XmlElement("ville")] public String _Ville { init; get; }
     
     
     public override string ToString() {

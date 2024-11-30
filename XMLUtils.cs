@@ -45,7 +45,7 @@ public class XMLUtils
         
         XsltArgumentList argList = new XsltArgumentList();
         argList.AddParam("destinedName", "", "Orouge");
-        // argList.AddParam("destinedId", "", "001");
+        argList.AddParam("destinedId", "", "001");
             
         // XmlTextWriter htmlWriter = new XmlTextWriter(htmlFilePath, Encoding.UTF8);
         // xslt.Transform(xpathDoc, argList, htmlWriter);

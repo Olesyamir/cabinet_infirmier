@@ -5,14 +5,14 @@ namespace CabinetInfirmier;
 public class CabinetXMLReader {
     public static int CountNode(string xmlFilePath, string myXpathExpression, string nsURI)
     {
-    DOM2Xpath cabinetDOM = new DOM2Xpath(xmlFilePath);
+    CabinetDOM cabinetDOM = new CabinetDOM(xmlFilePath);
     XmlNodeList nlElementsDOM = cabinetDOM.GetXPath ("med", nsURI, myXpathExpression);
     return nlElementsDOM.Count;
     } // fin de foction CountNode
 
     public static bool HasAdresse(string xmlFilePath, string myXpathExpression, string nsURI)
     {
-        DOM2Xpath cabinetDOM = new DOM2Xpath(xmlFilePath);
+        CabinetDOM cabinetDOM = new CabinetDOM(xmlFilePath);
         XmlNodeList nlAdresseDOM = cabinetDOM.GetXPath ("med", nsURI, myXpathExpression );
         
         // 4 est le nb d'elements obligatoires dans adresse : 1) numero, 2) rue, 3) codePostal, 4) ville
