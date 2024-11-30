@@ -19,6 +19,9 @@
         </xs:keyref>
     </xs:element>
 
+    <!-- Définition de l'élément racine adresse -->
+    <xs:element name="adresse" type="med:Adresse"/>
+
     <!--classe cabinet-->
     <xs:complexType name="Cabinet">
         <xs:sequence>
