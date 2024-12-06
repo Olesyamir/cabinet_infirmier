@@ -5,16 +5,22 @@
            elementFormDefault="qualified">
 
     <!-- Définition de l'élément racine ngap -->
-    <xs:element name ='ngap' type="act:Ngap"/>
+    <xs:element name ='ngap' type="act:Ngap">
+        <xs:key name="typeSoin">
+            <xs:selector xpath="act:types/act:type"/>
+            <xs:field xpath="@idType"/>
+        </xs:key>
+        <xs:keyref name="typeIdRefTypeActe" refer="act:typeSoin">
+            <xs:selector xpath="act:actes/act:acte"/>
+            <xs:field xpath="@type"/>
+        </xs:keyref>
+    </xs:element>
     
     <!-- classe Ngap -->
     <xs:complexType name="Ngap">
         <xs:sequence>
             <xs:element name="types" type="act:Types">
-                <xs:key name="typeSoin">
-                    <xs:selector xpath="act:type"/>
-                    <xs:field xpath="@idType"/>
-                </xs:key>
+                
             </xs:element>
             <xs:element name="actes" type="act:Actes"/>
         </xs:sequence>
@@ -41,10 +47,7 @@
     <xs:complexType name="Actes">
         <xs:sequence>
             <xs:element name="acte" type="act:Acte" maxOccurs="unbounded"> <!-- TODO: id unique -->
-                <xs:keyref name="typeIdRefTypeActe" refer="act:typeSoin">
-                    <xs:selector xpath="act:acte"/>
-                    <xs:field xpath="@type"/>
-                </xs:keyref>
+                
             </xs:element>
         </xs:sequence>
     </xs:complexType>

@@ -7,8 +7,8 @@
     <xsl:output method="html"/>
     
     
-<!--    <xsl:param name ="destinedId" select ="001"/>-->
-    <xsl:param name ="destinedId"/>
+    <xsl:param name ="destinedId" select ="001"/>
+<!--    <xsl:param name ="destinedId"/>-->
     
     <!-- Prenom d'infirmier qui a un id  destinedId -->
     <xsl:variable name="prenomInfirmier" select="med:cabinet/med:infirmiers/med:infirmier[@idI=$destinedId]/med:prenom"/>
