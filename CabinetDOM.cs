@@ -142,4 +142,81 @@ public class CabinetDOM
         
         doc.Save(Console.Out);
     } // fin fonction AddPatient
+    
+    // Fonction pour savoir si un intervenant existe parmi les infirmiers
+    public void Isintervenantininfirmier(string idIntervenant)
+    {
+       // Vérifier si l'intervenant existe
+       // XPath pour récupérer les infirmiers avec le bon espace de noms
+       // XmlNodeList nlinfirmiers = GetXPath("med","http://www.univ-grenoble-alpes.fr/l3miage/medical","med:cabinet/med:infirmiers");
+       XmlNodeList nlinfirmiers = ((XmlElement)root).GetElementsByTagName("infirmier");
+       bool intervenantExists = false;
+       foreach (XmlElement infirmier in nlinfirmiers)
+       {
+           // Vérifier l'attribut idI de chaque infirmier
+           Console.WriteLine(infirmier.Attributes["idI"].Value);
+           if (infirmier.GetAttribute("idI") == idIntervenant)
+           {
+               intervenantExists = true;
+               break;
+           }
+       }
+       
+       // Si l'infirmier n'existe pas, une exception est levée
+       if (!intervenantExists)
+       {
+           throw new Exception($"Aucun infirmier trouvé avec l'ID {idIntervenant}.");
+       }
+    }
+    
+   //fonction pour rajouter une visite pour un patient en connaissance de son nom
+   public void AddVisiteToPatientByName(string patientName, string dateVisite, string idIntervenant, string idActe)
+   {
+       // Vérifier si l'intervenant existe
+       Isintervenantininfirmier(idIntervenant);
+      
+       // Recherche le patient par son nom
+       //string patientXPath = $"{GetNSPrefix()}:patient";
+       XmlNodeList nlpatients = ((XmlElement)root).GetElementsByTagName("patient");
+      
+       XmlElement targetPatient = null;
+       foreach (XmlElement patient in nlpatients)
+       {
+           // Console.WriteLine(patient.OuterXml);
+           XmlNode nameNode = patient.SelectSingleNode("nom", nsmgr);
+           
+           String nom_patient_current = patient.GetElementsByTagName("nom")[0].InnerText;
+           
+           // patient.GetElementsByTagName("nom")[0].InnerText
+           
+           if (nom_patient_current == patientName)
+           {
+               targetPatient = patient;
+               break;
+           }
+       }
+       if (targetPatient == null)
+       {
+           throw new Exception($"Aucun patient trouvé avec le nom {patientName}.");
+       }
+       
+       // Ajouter un nouvel élément "visite" au patient
+       XmlElement visite = doc.CreateElement(GetNSPrefix(), "visite", GetNSURI());
+       visite.SetAttribute("date", dateVisite);
+       visite.SetAttribute("intervenant", idIntervenant);
+       
+       // Ajouter un sous-élément "acte" à la visite
+       XmlElement acte = doc.CreateElement(GetNSPrefix(), "acte", GetNSURI());
+       acte.SetAttribute("idActe", idActe);
+       visite.AppendChild(acte);
+       
+       // Ajouter la visite au patient
+       targetPatient.AppendChild(visite);
+       
+       // Sauvegarder les modifications
+       doc.Save(Console.Out); // Affiche les modifications dans la console pour vérification
+       doc.Save(nomXMLDoc); // Sauvegarde dans un fichier XML si nécessaire
+       Console.WriteLine($"Visite ajoutée pour le patient {patientName}.");
+   } //fin de la fonction qui rajoute une visite
+   
 } // fin classe
