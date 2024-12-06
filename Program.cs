@@ -9,15 +9,16 @@ string xmlPathAdresse = "./data/xml/adresse.xml";
 string xmlPathInfirmier = "./data/xml/infirmier.xml";
 string xmlPathInfirmiers = "./data/xml/infirmiers.xml";
 
+AppContext.SetSwitch("Switch.System.Xml.AllowDefaultResolver", true);
 // validations de schemas
 // XMLUtils.ValidateXmlFileAsync ("http://www.univ-grenoble-alpes.fr/l3miage/medical", "./data/xsd/cabinet.xsd", "./data/xml/cabinet.xml");
 // XMLUtils.ValidateXmlFileAsync ("http://www.univ-grenoble-alpes.fr/l3miage/medical", "./data/xsd/patient.xsd", "./data/xml/patient.xml");
 XMLUtils.ValidateXmlFileAsync ("http://www.univ-grenoble-alpes.fr/l3miage/actes", "./data/xsd/actes.xsd", "./data/xml/actes.xml");
-AppContext.SetSwitch("Switch.System.Xml.AllowDefaultResolver", true);
+
 
 // execution de XSLT
-// XMLUtils.XslTransform(xmlPathCabinet, "./data/xslt/cabinet.xslt", "./data/html/cabinet_TEST.html");
-// XMLUtils.XslTransform(xmlPathCabinet, "./data/xslt/patient.xslt", "./data/xml/patient_TEST.xml");
+XMLUtils.XslTransform(xmlPathCabinet, "./data/xslt/cabinet.xslt", "./data/html/cabinet_TEST.html");
+XMLUtils.XslTransform(xmlPathCabinet, "./data/xslt/patient.xslt", "./data/xml/patient_TEST.xml");
 
 // parser
 Cabinet.AnalyseGlobale(xmlPathCabinet);
