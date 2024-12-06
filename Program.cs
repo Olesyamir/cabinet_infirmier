@@ -13,40 +13,43 @@ AppContext.SetSwitch("Switch.System.Xml.AllowDefaultResolver", true);
 // validations de schemas
 // XMLUtils.ValidateXmlFileAsync ("http://www.univ-grenoble-alpes.fr/l3miage/medical", "./data/xsd/cabinet.xsd", "./data/xml/cabinet.xml");
 // XMLUtils.ValidateXmlFileAsync ("http://www.univ-grenoble-alpes.fr/l3miage/medical", "./data/xsd/patient.xsd", "./data/xml/patient.xml");
-XMLUtils.ValidateXmlFileAsync ("http://www.univ-grenoble-alpes.fr/l3miage/actes", "./data/xsd/actes.xsd", "./data/xml/actes.xml");
+// XMLUtils.ValidateXmlFileAsync ("http://www.univ-grenoble-alpes.fr/l3miage/actes", "./data/xsd/actes.xsd", "./data/xml/actes.xml");
 
 
 // execution de XSLT
-XMLUtils.XslTransform(xmlPathCabinet, "./data/xslt/cabinet.xslt", "./data/html/cabinet_TEST.html");
-XMLUtils.XslTransform(xmlPathCabinet, "./data/xslt/patient.xslt", "./data/xml/patient_TEST.xml");
-
+// XMLUtils.XslTransform(xmlPathCabinet, "./data/xslt/cabinet.xslt", "./data/html/cabinet_TEST.html");
+// XMLUtils.XslTransform(xmlPathCabinet, "./data/xslt/patient.xslt", "./data/xml/patient_TEST.xml");
+//
 // parser
-Cabinet.AnalyseGlobale(xmlPathCabinet);
-Cabinet.GetAllElements(xmlPathCabinet, "nom", "patient");
-Console.WriteLine(Cabinet.GetNbActes(xmlPathCabinet));
+// CabinetXMLReader.AnalyseGlobale(xmlPathCabinet);
+// CabinetXMLReader.GetAllElements(xmlPathCabinet, "nom", "patient");
+// Console.WriteLine(CabinetXMLReader.GetNbActes(xmlPathCabinet));
 
 // Vérification de présence de valeurs particulières avec DOM
 //      verification de 3 infirmiers
-Console.WriteLine("Nb d'infirmiers  attendue : 3, nb trouvé : {0}", CabinetXMLReader.CountNode(xmlPathCabinet, "//med:cabinet/med:infirmiers/med:infirmier", URICabinet));
+CabinetDOM cabinetDOM = new CabinetDOM(xmlPathCabinet);
+// Console.WriteLine("Nb d'infirmiers  attendue : 3, nb trouvé : {0}", cabinetDOM.CountNode(xmlPathCabinet, "//med:cabinet/med:infirmiers/med:infirmier", URICabinet));
     
 //      verification de 4 patients
-Console.WriteLine("Nb de patients attendue : 4, nb trouvé : {0}", CabinetXMLReader.CountNode(xmlPathCabinet, "//med:cabinet/med:patients/med:patient", URICabinet));
+// Console.WriteLine("Nb de patients attendue : 4, nb trouvé : {0}", cabinetDOM.CountNode(xmlPathCabinet, "//med:cabinet/med:patients/med:patient", URICabinet));
 
 //      une adresse complète pour le cabinet
-Console.WriteLine("Adresse est complet : {0}", CabinetXMLReader.HasAdresse(xmlPathCabinet, "//med:cabinet/med:adresse", URICabinet));
+// Console.WriteLine("Adresse est complet : {0}", cabinetDOM.HasAdresse(xmlPathCabinet, "//med:cabinet/med:adresse", URICabinet));
 
 //      une adresse complète pour alecole
-Console.WriteLine("Adresse est complet : {0}", CabinetXMLReader.HasAdresse(xmlPathCabinet, "//med:cabinet/med:patients/med:patient[med:nom='alecole']/med:adresse", URICabinet));
+// Console.WriteLine("Adresse est complet : {0}", cabinetDOM.HasAdresse(xmlPathCabinet, "//med:cabinet/med:patients/med:patient[med:nom='alecole']/med:adresse", URICabinet));
 // 
 //      numero securite sociale est valide pour Orouge
-Console.WriteLine(CabinetXMLReader.isNumeroValide("Orouge"));
+// Console.WriteLine(cabinetDOM.isNumeroValide("Orouge"));
 
 // 7.3.3 Modification de l’arbre DOM et de l’instance XML.
 // ajouter un infirmier dont l’id sera 005. Il s’appelle Némard Jean.
-CabinetDOM cabinetDom = new CabinetDOM(xmlPathCabinet);
-cabinetDom.AddInfirmier("Nemard", "Jean");
-cabinetDom.AddPatient("Niskotch", "Nicole", "F", "1999-03-01", "299030105545853", "","6", "Universite", "38400", "Grenoble");
 
+// CabinetDOM cabinetDom = new CabinetDOM(xmlPathCabinet);
+
+cabinetDOM.AddInfirmier("Nemard", "Jean");
+cabinetDOM.AddPatient("Niskotch", "Nicole", "F", "1999-03-01", "299030105545853", "","6", "Universite", "38400", "Grenoble");
+cabinetDOM.AddVisiteToPatientByName("Niskotch", "2024-12-12", "001", "102");
 // 7.4 SERIALISATION
 // 7.4.1 Adresse , Infirmier
 
@@ -79,5 +82,5 @@ using (TextReader reader = new StreamReader(xmlPathCabinet)) {
     c = (Cabinet)xmlCb.Deserialize(reader);
 }
 
-Console.WriteLine(c);
+// Console.WriteLine(c);
 

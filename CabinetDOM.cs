@@ -16,7 +16,7 @@ public class CabinetDOM
         doc.Load(filename);
         root = doc.DocumentElement;
         nsmgr = new XmlNamespaceManager(doc.NameTable);  
-        nsmgr.AddNamespace(root.Prefix, root.NamespaceURI);
+        nsmgr.AddNamespace("med", "http://www.univ-grenoble-alpes.fr/l3miage/medical");
     }
     
     public XmlNodeList GetXPath(string nsPrefix, string nsURI, string expression)
@@ -34,6 +34,89 @@ public class CabinetDOM
     public String GetNSURI() {
         return root.NamespaceURI;
     }
+    
+    public int CountNode(string xmlFilePath, string myXpathExpression, string nsURI)
+    {
+        // CabinetDOM cabinetDOM = new CabinetDOM(xmlFilePath);
+        XmlNodeList nlElementsDOM = GetXPath ("med", nsURI, myXpathExpression);
+        return nlElementsDOM.Count;
+    } // fin de foction CountNode
+    
+    
+    public bool HasAdresse(string xmlFilePath, string myXpathExpression, string nsURI)
+    {
+        XmlNodeList nlAdresseDOM = GetXPath ("med", nsURI, myXpathExpression );
+        
+        // 4 est le nb d'elements obligatoires dans adresse : 1) numero, 2) rue, 3) codePostal, 4) ville
+        // etage est optionelle
+        
+        Console.WriteLine (nlAdresseDOM[0].ChildNodes.Count);
+        return nlAdresseDOM[0].ChildNodes.Count > 3;
+    }// fin de foction HasAdresse
+    
+    
+    public static bool isNumeroValide0(string sexe, string numero, string naissance)
+    {
+        // Extraire les informations de naissance
+        string[] dateNaissance = naissance.Split('-');
+        string anneeNaissance = dateNaissance[0];
+        string moisNaissance = dateNaissance[1].PadLeft(2, '0');  // Ajouter un zéro devant si nécessaire
+        string jourNaissance = dateNaissance[2].PadLeft(2, '0');  // Ajouter un zéro devant si nécessaire
+
+        // Extraire les deux derniers chiffres de l'année de naissance
+        string derniersChiffresAnnee = anneeNaissance.Substring(2, 2);
+
+        // Vérifier les conditions
+        bool conditionSexe = (sexe == "M" && numero[0] == '1') || (sexe == "F" && numero[0] == '2');
+        bool conditionDate = numero.Substring(1, 2) == derniersChiffresAnnee;
+        bool conditionMois = numero.Substring(3, 2) == moisNaissance;
+        bool conditionJour = numero.Substring(5, 2) == jourNaissance;
+        
+        if (conditionSexe && conditionDate && conditionMois && conditionJour)
+        {
+            return true;
+        }
+
+        return false;
+        
+    } // fin fonction isNumeroValide0
+    
+    
+    public bool isNumeroValide(string nomPatient)
+    {
+        // Construire l'expression XPath pour trouver le patient
+        string myXpathExpression = "//med:cabinet/med:patients/med:patient[med:nom='" + nomPatient + "']";
+
+        // Récupérer le nœud correspondant au patient
+        XmlNode patientNode = doc.SelectSingleNode(myXpathExpression, nsmgr);
+
+        // Vérifier si le patient existe
+        if (patientNode == null)
+        {
+            // Patient introuvable
+            Console.WriteLine("Nom patient n'existe pas");
+            return false;
+        }
+
+        // Récupérer les informations du patient
+        XmlNode sexeNode = patientNode.SelectSingleNode("med:sexe", nsmgr);
+        XmlNode numeroNode = patientNode.SelectSingleNode("med:numero", nsmgr);
+        XmlNode naissanceNode = patientNode.SelectSingleNode("med:naissance", nsmgr);
+
+        if (sexeNode == null || numeroNode == null)
+        {
+            // Si l'une des informations est manquante
+            return false;
+        }
+
+        string sexe = sexeNode.InnerText;
+        string numero = numeroNode.InnerText;
+        string naissance = naissanceNode.InnerText;
+        
+        return (isNumeroValide0(sexe, numero, naissance));
+
+    }// fin de foction isNumeroValide
+    
     
     public void AddInfirmier(String nom, String prenom) {
         XmlElement infirmier = doc.CreateElement(root.Prefix, "infirmier", root.NamespaceURI);
@@ -90,7 +173,7 @@ public class CabinetDOM
         naissancePatient.InnerText = naissance;
         patient.AppendChild(naissancePatient);
 
-        if (CabinetXMLReader.isNumeroValide0(sexe, numeroSS, naissance))
+        if (isNumeroValide0(sexe, numeroSS, naissance))
         {
             XmlElement numeroSSPatient = doc.CreateElement(root.Prefix, "numero", root.NamespaceURI);
             numeroSSPatient.InnerText = numeroSS;
@@ -142,4 +225,92 @@ public class CabinetDOM
         
         doc.Save(Console.Out);
     } // fin fonction AddPatient
+    
+    // Fonction pour savoir si un intervenant existe parmi les infirmiers
+    public void Isintervenantininfirmier(string idIntervenant)
+    {
+       // Vérifier si l'intervenant existe
+       // XPath pour récupérer les infirmiers avec le bon espace de noms
+       // XmlNodeList nlinfirmiers = GetXPath("med","http://www.univ-grenoble-alpes.fr/l3miage/medical","med:cabinet/med:infirmiers");
+       XmlNodeList nlinfirmiers = ((XmlElement)root).GetElementsByTagName("infirmier");
+       bool intervenantExists = false;
+       foreach (XmlElement infirmier in nlinfirmiers)
+       {
+           // Vérifier l'attribut idI de chaque infirmier
+           Console.WriteLine(infirmier.Attributes["idI"].Value);
+           if (infirmier.GetAttribute("idI") == idIntervenant)
+           {
+               intervenantExists = true;
+               break;
+           }
+       }
+       
+       // Si l'infirmier n'existe pas, une exception est levée
+       if (!intervenantExists)
+       {
+           throw new Exception($"Aucun infirmier trouvé avec l'ID {idIntervenant}.");
+       }
+    }
+    
+   //fonction pour rajouter une visite pour un patient en connaissance de son nom
+   public void AddVisiteToPatientByName(string patientName, string dateVisite, string idIntervenant, string idActe)
+   {
+       // Vérifier si l'intervenant existe
+       Isintervenantininfirmier(idIntervenant);
+      
+       // Recherche le patient par son nom
+       //string patientXPath = $"{GetNSPrefix()}:patient";
+       
+       // string myXpathExpression = "//med:cabinet/med:patients/med:patient[med:nom='" + patientName + "']";
+       // if (myXpathExpression != null)
+       // {
+       //     XmlNode patientNode = doc.SelectSingleNode(myXpathExpression, nsmgr);}
+       // }
+
+   
+       XmlNodeList nlpatients = ((XmlElement)root).GetElementsByTagName("patient");
+       
+       XmlElement targetPatient = null;
+       foreach (XmlElement patient in nlpatients)
+       {
+           // Console.WriteLine(patient.OuterXml);
+       XmlNode nameNode = patient.SelectSingleNode("//med:nom", nsmgr);
+           
+           
+           
+           String nom_patient_current = patient.GetElementsByTagName("nom")[0].InnerText;
+           
+           // patient.GetElementsByTagName("nom")[0].InnerText
+           
+           if (nom_patient_current == patientName)
+           // if (nameNode.InnerText == patientName)
+           {
+               targetPatient = patient;
+               break;
+           }
+       }
+       if (targetPatient == null)
+       {
+           throw new Exception($"Aucun patient trouvé avec le nom {patientName}.");
+       }
+       // Ajouter un nouvel élément "visite" au patient
+       
+       XmlElement visite = doc.CreateElement(GetNSPrefix(), "visite", GetNSURI());
+       visite.SetAttribute("date", dateVisite);
+       visite.SetAttribute("intervenant", idIntervenant);
+       
+       // Ajouter un sous-élément "acte" à la visite
+       XmlElement acte = doc.CreateElement(GetNSPrefix(), "acte", GetNSURI());
+       acte.SetAttribute("idActe", idActe);
+       visite.AppendChild(acte);
+       
+       // Ajouter la visite au patient
+       targetPatient.AppendChild(visite);
+       
+       // Sauvegarder les modifications
+       doc.Save(Console.Out); // Affiche les modifications dans la console pour vérification
+       doc.Save(nomXMLDoc); // Sauvegarde dans un fichier XML si nécessaire
+       Console.WriteLine($"Visite ajoutée pour le patient {patientName}.");
+   } //fin de la fonction qui rajoute une visite
+   
 } // fin classe
