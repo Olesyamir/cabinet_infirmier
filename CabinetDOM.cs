@@ -37,7 +37,6 @@ public class CabinetDOM
     
     public int CountNode(string xmlFilePath, string myXpathExpression, string nsURI)
     {
-        // CabinetDOM cabinetDOM = new CabinetDOM(xmlFilePath);
         XmlNodeList nlElementsDOM = GetXPath ("med", nsURI, myXpathExpression);
         return nlElementsDOM.Count;
     } // fin de foction CountNode
@@ -54,8 +53,8 @@ public class CabinetDOM
         return nlAdresseDOM[0].ChildNodes.Count > 3;
     }// fin de foction HasAdresse
     
-    
-    public static bool isNumeroValide0(string sexe, string numero, string naissance)
+    //
+    public static bool IsFormattedNumberCorrect(string sexe, string numero, string naissance)
     {
         // Extraire les informations de naissance
         string[] dateNaissance = naissance.Split('-');
@@ -76,19 +75,15 @@ public class CabinetDOM
         {
             return true;
         }
-
         return false;
         
-    } // fin fonction isNumeroValide0
+    } // fin fonction IsFormattedNumberCorrect
     
     
     public bool isNumeroValide(string nomPatient)
     {
-        // Construire l'expression XPath pour trouver le patient
-        string myXpathExpression = "//med:cabinet/med:patients/med:patient[med:nom='" + nomPatient + "']";
-
         // Récupérer le nœud correspondant au patient
-        XmlNode patientNode = doc.SelectSingleNode(myXpathExpression, nsmgr);
+        XmlNode patientNode = GetNodePatientParNom(nomPatient);
 
         // Vérifier si le patient existe
         if (patientNode == null)
@@ -113,7 +108,7 @@ public class CabinetDOM
         string numero = numeroNode.InnerText;
         string naissance = naissanceNode.InnerText;
         
-        return (isNumeroValide0(sexe, numero, naissance));
+        return (IsFormattedNumberCorrect(sexe, numero, naissance));
 
     }// fin de foction isNumeroValide
     
@@ -127,10 +122,7 @@ public class CabinetDOM
         idInfirmier = number.ToString("D3"); 
         
         infirmier.SetAttribute("idI", idInfirmier);
-        
-        var infirmiersLocation = ((XmlElement)root).GetElementsByTagName("infirmiers").Item(0);
-        
-        Console.WriteLine(infirmiersLocation);
+        var infirmiersLocation = doc.SelectSingleNode("//med:cabinet/med:infirmiers", nsmgr);
         
         infirmiersLocation.AppendChild(infirmier);
         
@@ -148,13 +140,13 @@ public class CabinetDOM
         
         doc.Save(Console.Out);
         // doc.Save(nomXMLDoc);
-    }
+    } // fin AddInfirmier()
 
     public void AddPatient(String nom, String prenom, string sexe, string naissance, string numeroSS, String? etage, String? numeroRue, String? rue, String codePostal,
         String ville)
     {
         XmlElement patient = doc.CreateElement(root.Prefix, "patient", root.NamespaceURI);
-        var patientsLocation = ((XmlElement)root).GetElementsByTagName("patients").Item(0);
+        var patientsLocation = doc.SelectSingleNode("//med:cabinet/med:patients", nsmgr);
         patientsLocation.AppendChild(patient);
         
         XmlElement nomPatient = doc.CreateElement(root.Prefix, "nom", root.NamespaceURI);
@@ -173,7 +165,7 @@ public class CabinetDOM
         naissancePatient.InnerText = naissance;
         patient.AppendChild(naissancePatient);
 
-        if (isNumeroValide0(sexe, numeroSS, naissance))
+        if (IsFormattedNumberCorrect(sexe, numeroSS, naissance))
         {
             XmlElement numeroSSPatient = doc.CreateElement(root.Prefix, "numero", root.NamespaceURI);
             numeroSSPatient.InnerText = numeroSS;
@@ -226,74 +218,32 @@ public class CabinetDOM
         doc.Save(Console.Out);
     } // fin fonction AddPatient
     
-    // Fonction pour savoir si un intervenant existe parmi les infirmiers
-    public void Isintervenantininfirmier(string idIntervenant)
+    
+    public bool IsIninfirmierExiste(string idIntervenant)
     {
-       // Vérifier si l'intervenant existe
-       // XPath pour récupérer les infirmiers avec le bon espace de noms
-       // XmlNodeList nlinfirmiers = GetXPath("med","http://www.univ-grenoble-alpes.fr/l3miage/medical","med:cabinet/med:infirmiers");
-       XmlNodeList nlinfirmiers = ((XmlElement)root).GetElementsByTagName("infirmier");
-       bool intervenantExists = false;
-       foreach (XmlElement infirmier in nlinfirmiers)
-       {
-           // Vérifier l'attribut idI de chaque infirmier
-           Console.WriteLine(infirmier.Attributes["idI"].Value);
-           if (infirmier.GetAttribute("idI") == idIntervenant)
-           {
-               intervenantExists = true;
-               break;
-           }
-       }
-       
-       // Si l'infirmier n'existe pas, une exception est levée
-       if (!intervenantExists)
-       {
-           throw new Exception($"Aucun infirmier trouvé avec l'ID {idIntervenant}.");
-       }
+        // Vérifier si l'intervenant existe
+        string myXpathExpression = "//med:cabinet/med:infirmiers/med:infirmier[@idI='" + idIntervenant + "']";
+        XmlNode infirmierLocation = doc.SelectSingleNode(myXpathExpression, nsmgr);
+        return infirmierLocation != null;
+    } // fin Isintervenantininfirmier()
+
+    public XmlNode? GetNodePatientParNom(string nomPatient)
+    {
+        string myXpathExpression = "//med:cabinet/med:patients/med:patient[med:nom='" + nomPatient + "']";
+        return doc.SelectSingleNode(myXpathExpression, nsmgr);
     }
     
    //fonction pour rajouter une visite pour un patient en connaissance de son nom
-   public void AddVisiteToPatientByName(string patientName, string dateVisite, string idIntervenant, string idActe)
+   public void AddVisiteToPatientByName(string nomPatient, string dateVisite, string idIntervenant, string idActe)
    {
        // Vérifier si l'intervenant existe
-       Isintervenantininfirmier(idIntervenant);
-      
-       // Recherche le patient par son nom
-       //string patientXPath = $"{GetNSPrefix()}:patient";
+       if (!IsIninfirmierExiste(idIntervenant)) 
+           throw new Exception($"Aucun infirmier trouvé avec l'ID {idIntervenant}.");
        
-       // string myXpathExpression = "//med:cabinet/med:patients/med:patient[med:nom='" + patientName + "']";
-       // if (myXpathExpression != null)
-       // {
-       //     XmlNode patientNode = doc.SelectSingleNode(myXpathExpression, nsmgr);}
-       // }
-
-   
-       XmlNodeList nlpatients = ((XmlElement)root).GetElementsByTagName("patient");
-       
-       XmlElement targetPatient = null;
-       foreach (XmlElement patient in nlpatients)
-       {
-           // Console.WriteLine(patient.OuterXml);
-       XmlNode nameNode = patient.SelectSingleNode("//med:nom", nsmgr);
-           
-           
-           
-           String nom_patient_current = patient.GetElementsByTagName("nom")[0].InnerText;
-           
-           // patient.GetElementsByTagName("nom")[0].InnerText
-           
-           if (nom_patient_current == patientName)
-           // if (nameNode.InnerText == patientName)
-           {
-               targetPatient = patient;
-               break;
-           }
-       }
+       // Vérifier si patient existe
+       XmlNode targetPatient = GetNodePatientParNom(nomPatient);
        if (targetPatient == null)
-       {
-           throw new Exception($"Aucun patient trouvé avec le nom {patientName}.");
-       }
-       // Ajouter un nouvel élément "visite" au patient
+           throw new Exception($"Aucun patient trouvé avec le nom {nomPatient}.");
        
        XmlElement visite = doc.CreateElement(GetNSPrefix(), "visite", GetNSURI());
        visite.SetAttribute("date", dateVisite);
@@ -310,7 +260,7 @@ public class CabinetDOM
        // Sauvegarder les modifications
        doc.Save(Console.Out); // Affiche les modifications dans la console pour vérification
        doc.Save(nomXMLDoc); // Sauvegarde dans un fichier XML si nécessaire
-       Console.WriteLine($"Visite ajoutée pour le patient {patientName}.");
+       Console.WriteLine($"\nVisite ajoutée pour le patient {nomPatient}.");
    } //fin de la fonction qui rajoute une visite
    
 } // fin classe
