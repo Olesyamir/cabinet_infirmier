@@ -45,9 +45,8 @@ CabinetDOM cabinetDOM = new CabinetDOM(xmlPathCabinet);
 // 7.3.3 Modification de l’arbre DOM et de l’instance XML.
 // ajouter un infirmier dont l’id sera 005. Il s’appelle Némard Jean.
 
-// CabinetDOM cabinetDom = new CabinetDOM(xmlPathCabinet);
 
-cabinetDOM.AddInfirmier("Nemard", "Jean");
+// cabinetDOM.AddInfirmier("Nemard", "Jean");
 cabinetDOM.AddPatient("Niskotch", "Nicole", "F", "1999-03-01", "299030105545853", "","6", "Universite", "38400", "Grenoble");
 cabinetDOM.AddVisiteToPatientByName("Niskotch", "2024-12-12", "001", "102");
 // 7.4 SERIALISATION
